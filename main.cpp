@@ -79,28 +79,7 @@ void hack(){
 int main(){
   std::cout << "working\n"; 
 
- /*start of obviously copy-pasted code from nullbyte 
-  gameWindow = FindWindow(NULL,"PuyoVS");
- 
-  if(!gameWindow){
-    std::cout << "Window not found" << std::endl;
-    return 1;
-  }
-  else {
-    if (!GetWindowThreadProcessId(gameWindow,&procID)){
-      std::cerr << "Get window process ID error: " << GetLastError() << std::endl;
-      return 1;
-    }
-  }
-  if(procID != 0) hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, procID);
-  if(!hProc){
-    std::cerr << "Can not open process: " << GetLastError() << std::endl;
-    return 2;
-  }
-  else std::cout << "Process Found Ready to write\n" << std::endl;
-  end of copied code
-  */
-  if (windowops::gameWindowOps(hProc, gameWindow, procID)){
+   if (windowops::gameWindowOps(hProc, gameWindow, procID)){
     std::cerr << "problem with gameWindowOps()";
     return 1;
   }
