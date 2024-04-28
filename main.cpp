@@ -12,6 +12,7 @@ TODO:
 #include <chrono>
 #include <windows.h>
 #include <math.h>
+#include "windowops.hpp"
 using namespace std;
 bool continue_counting = true;
 bool continue_running = true;
@@ -20,7 +21,7 @@ char input;
 unsigned long long scoreAddress; // use the address of the score for offsets
 
 HANDLE hProc = NULL;
-HWND Window = NULL;
+HWND gameWindow = NULL;
 HHOOK hHook = NULL;
 HANDLE hThread = NULL;
 DWORD procID;
@@ -31,8 +32,8 @@ inline void hexStringToValue(string s){
     current = (short)s[i]-48;
     if (current > 9) current -= 7;
     scoreAddress += current * pow(16,(8-i-1));
-    std::cout << "current letter: " << s[i] << " and its val: " << current;
-    std::cout << "scoreAddress: " << scoreAddress << std::endl;
+    std::cout << "current letter: " << s[i] << ", and its val: " << current;
+    std::cout << " | scoreAddress: " << scoreAddress << std::endl;
   }
   std::cout << " | converted to int -> " << scoreAddress << std::endl;
 }
@@ -56,7 +57,7 @@ void Twaitforstop(){
     if (input == 'x') continue_counting = !continue_counting;
     if (input == 'e') continue_running = false;
   } 
-  CloseHandle(Window);
+  CloseHandle(gameWindow);
   CloseHandle(hProc);
 }
 
@@ -78,15 +79,15 @@ void hack(){
 int main(){
   std::cout << "working\n"; 
 
- //start of obviously copy-pasted code from nullbyte 
-  Window = FindWindow(NULL,"PuyoVS");
+ /*start of obviously copy-pasted code from nullbyte 
+  gameWindow = FindWindow(NULL,"PuyoVS");
  
-  if(!Window){
+  if(!gameWindow){
     std::cout << "Window not found" << std::endl;
     return 1;
   }
   else {
-    if (!GetWindowThreadProcessId(Window,&procID)){
+    if (!GetWindowThreadProcessId(gameWindow,&procID)){
       std::cerr << "Get window process ID error: " << GetLastError() << std::endl;
       return 1;
     }
@@ -97,8 +98,19 @@ int main(){
     return 2;
   }
   else std::cout << "Process Found Ready to write\n" << std::endl;
-  //end of copied code
-  
+  end of copied code
+  */
+  if (windowops::gameWindowOps(hProc, gameWindow, procID)){
+    std::cerr << "problem with gameWindowOps()";
+    return 1;
+  }
+  /*
+  if (windowops::createInterface()){ 
+    std::cerr << "Couldn't make Interface"; 
+    return 1;
+  } 
+  */
+
   std::cout << "address of score: ";
   string hexString = "";
   std::cin >> hexString;
